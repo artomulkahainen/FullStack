@@ -8,7 +8,7 @@ const Button = ({ handleClick, type }) => (
 const App = ({ anecdotes }) => {
   const [selected, setSelected] = useState(0);
   const [points, setPoints] = useState({ 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
-  const [highestPoints, setHighestPoints] = useState(0);
+  const [highest, setHighest] = useState(0);
 
   const anecdoteHandler = () => {
     return setSelected(
@@ -21,17 +21,9 @@ const App = ({ anecdotes }) => {
     updatedPoints[selected] += 1;
     setPoints(updatedPoints);
     let array = Object.keys(updatedPoints).map((key) => updatedPoints[key]);
-    let highestIndex = array.indexOf(Math.max.apply(null, array));
-    setHighestPoints(highestIndex);
-    console.log(highestPoints);
+    setHighest(array.indexOf(Math.max.apply(null, array)));
+    console.log(highest);
   };
-
-  /*const findHighestPoints = () => {
-    let highest = Object.keys(points).reduce((a, b) =>
-      points[a] >= points[b] ? a : b
-    );
-    return setHighestPoint(highest);
-  };*/
 
   return (
     <div>
@@ -41,8 +33,8 @@ const App = ({ anecdotes }) => {
       <Button handleClick={voteHandler} type='VOTE' />
       <Button handleClick={anecdoteHandler} type='NEXT ANECDOTE' />
       <h1>Anecdote with most votes</h1>
-      <p>{anecdotes[highestPoints]}</p>
-      <p>has {highestPoints} votes</p>
+      <p>{anecdotes[highest]}</p>
+      <p>has {points[highest]} votes</p>
     </div>
   );
 };
