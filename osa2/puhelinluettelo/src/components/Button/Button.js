@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Button = ({ formSend, type }) => (
-  <button onClick={formSend}>{type}</button>
+const Button = ({ formSend, text }) => (
+  <button onClick={formSend}>{text}</button>
 );
 
 export default Button;
