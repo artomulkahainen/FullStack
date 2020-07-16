@@ -2,24 +2,17 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Form from './components/Form/Form';
 import Numbers from './components/Numbers/Numbers';
-import axios from 'axios';
+import personService from './services/personService';
+import uniqid from 'uniqid';
 
 const App = () => {
+  // State of the app
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newFilter, setNewFilter] = useState('');
   const [newNumber, setNewNumber] = useState('');
 
-  const hook = () => {
-    console.log('effect fires up');
-    axios.get('http://localhost:3001/persons').then((response) => {
-      console.log('promise fulfilled');
-      setPersons(response.data);
-    });
-  };
-
-  useEffect(hook, []);
-
+  // Different functions for the app
   const nameChangeHandler = (event) => {
     setNewName(event.target.value);
   };
@@ -46,15 +39,65 @@ const App = () => {
     event.preventDefault();
     let searchSimilar = persons.filter((el) => el.name === newName);
     if (searchSimilar.length === 0 && newNumber.length === 10) {
-      let updatedList = [...persons];
-      updatedList.push({ name: newName, number: newNumber });
-      setPersons(updatedList);
+      let personObject = { name: newName, number: newNumber, id: uniqid() };
+      addPerson(personObject);
+      setPersons(persons.concat(personObject));
     } else {
-      searchSimilar.length > 0
-        ? alert('Similar name is added already!')
-        : alert('Phone number must be ten characters long!');
+      if (searchSimilar.length === 1) {
+        let updatedPerson = {
+          name: searchSimilar[0].name,
+          number: newNumber,
+          id: searchSimilar[0].id,
+        };
+        let confirm = window.confirm(
+          newName + ' is already on the list, do you want to update the number?'
+        );
+        newNumber.length !== 10 ? (confirm = false) : console.log();
+        newNumber.length !== 10
+          ? alert('Phone number must be 10 characters long!')
+          : console.log();
+        confirm
+          ? updatePerson(updatedPerson, searchSimilar[0].id)
+          : console.log();
+      } else {
+        alert('Phone number must be 10 characters long!');
+      }
     }
   };
+
+  const personRemoveHandler = (person) => {
+    let confirm = window.confirm('Delete ' + person.name + '?');
+    if (confirm) {
+      personService.deleteObject(person).then(() => {
+        let updatedList = persons.filter((prs) => prs.id !== person.id);
+        setPersons(updatedList);
+      });
+    }
+  };
+
+  const getPersons = () => {
+    personService.getAll().then((persons) => setPersons(persons));
+  };
+
+  const addPerson = (newObject) => {
+    personService
+      .add(newObject)
+      .then((returnedPerson) => setPersons(persons.concat(returnedPerson)));
+  };
+
+  const updatePerson = (updatedPerson, personId) => {
+    //let updatePerson = persons.find(person => person.id === updatedPerson.id);
+    let updatedList = [...persons];
+    updatedList.find((person) =>
+      person.id === updatedPerson.id
+        ? (person.number = updatedPerson.number)
+        : console.log()
+    );
+    setPersons(updatedList);
+    personService.update(updatedPerson, personId);
+  };
+
+  useEffect(getPersons, []);
 
   return (
     <div>
@@ -66,7 +109,10 @@ const App = () => {
         filterHandler={filterChangeHandler}
         formSend={detailsSendHandler}
       />
-      <Numbers persons={nameFilter(persons, newFilter)} />
+      <Numbers
+        persons={nameFilter(persons, newFilter)}
+        personRemove={personRemoveHandler}
+      />
     </div>
   );
 };
