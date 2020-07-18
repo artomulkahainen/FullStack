@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Form from './components/Form/Form';
 import Numbers from './components/Numbers/Numbers';
 import personService from './services/personService';
-//import uniqid from 'uniqid';
+import uniqid from 'uniqid';
 import Notification from './components/Notification/Notification';
 
 const App = () => {
@@ -42,7 +42,7 @@ const App = () => {
     event.preventDefault();
     let searchSimilar = persons.filter((el) => el.name === newName);
     if (searchSimilar.length === 0 && newNumber.length === 10) {
-      let personObject = { name: newName, number: newNumber };
+      let personObject = { name: newName, number: newNumber, id: uniqid() };
       addPerson(personObject);
       setPersons(persons.concat(personObject));
       setNotificationMessage(`Person ${personObject.name} was added`);
