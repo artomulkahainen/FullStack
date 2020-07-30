@@ -5,7 +5,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const Person = require('./models/person');
 
-morgan.token('body', function (req, res) {
+morgan.token('body', function (req) {
   return JSON.stringify(req.body);
 });
 
@@ -20,39 +20,37 @@ app.use(
 app.use(cors());
 
 // APP POST
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const body = req.body;
-
-  if (body.name === undefined || body.number === undefined) {
-    if (body.name === undefined) {
-      return res.status(404).json({ error: 'name is missing' });
-    } else if (body.number === undefined) {
-      return res.status(404).json({ error: 'number is missing' });
-    }
-  }
 
   const person = new Person({
     name: body.name,
     number: body.number,
   });
 
-  person.save().then((savedPerson) => {
-    res.json(savedPerson.toJSON());
-  });
+  person
+    .save()
+    .then((savedPerson) => {
+      res.json(savedPerson.toJSON());
+    })
+    .catch((error) => {
+      next(error);
+    });
 });
 
 // GET -METHODS
 
 app.get('/info', (req, res) => {
-  /*let numberOfPersons = Person.find({}).then((persons) => {
-    persons.reduce((total, person) => total + 1);
-  }, 0);
-  console.log(numberOfPersons);*/
-  let numberOfPersons = Person.persons.people.countDocuments();
-  console.log(numberOfPersons);
-  res.send(
-    `<p>Phonebook has info for ${numberOfPersons} people</p><p>${new Date()}</p>`
-  );
+  const countPersons = (persons) =>
+    persons.reduce((total, person) => total + 1, 0);
+
+  Person.find({}).then((persons) => {
+    res.send(
+      `<p>Phonebook has info for ${countPersons(
+        persons
+      )} people</p><p>${new Date()}</p>`
+    );
+  });
 });
 
 app.get('/api/persons', (req, res) => {
@@ -62,7 +60,7 @@ app.get('/api/persons', (req, res) => {
   });
 });
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
   Person.findById(req.params.id)
     .then((person) => {
       if (person) {
@@ -110,9 +108,11 @@ app.use(unknownEndpoint);
 
 // HANDLE ERROR
 const errorHandler = (error, req, res, next) => {
-  console.log(error.message);
+  console.error(error.message);
   if (error.name === 'CastError') {
     return res.status(400).send({ error: 'malformatted id' });
+  } else if (error.name === 'ValidationError') {
+    return res.status(400).json({ error: error.message });
   }
   next(error);
 };

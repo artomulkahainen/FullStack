@@ -41,34 +41,21 @@ const App = () => {
   const detailsSendHandler = (event) => {
     event.preventDefault();
     let searchSimilar = persons.filter((el) => el.name === newName);
-    if (searchSimilar.length === 0 && newNumber.length === 10) {
+    if (searchSimilar.length === 0) {
       let personObject = { name: newName, number: newNumber };
       addPerson(personObject);
-      setPersons(persons.concat(personObject));
-      setNotificationMessage(`Person ${personObject.name} was added`);
-      setTimeout(() => {
-        setNotificationMessage(null);
-      }, 5000);
     } else {
-      if (searchSimilar.length === 1) {
-        let updatedPerson = {
-          name: searchSimilar[0].name,
-          number: newNumber,
-          id: searchSimilar[0].id,
-        };
-        let confirm = window.confirm(
-          newName + ' is already on the list, do you want to update the number?'
-        );
-        newNumber.length !== 10 ? (confirm = false) : console.log();
-        newNumber.length !== 10
-          ? alert('Phone number must be 10 characters long!')
-          : console.log();
-        confirm
-          ? updatePerson(updatedPerson, searchSimilar[0].id)
-          : console.log();
-      } else {
-        alert('Phone number must be 10 characters long!');
-      }
+      let updatedPerson = {
+        name: searchSimilar[0].name,
+        number: newNumber,
+        id: searchSimilar[0].id,
+      };
+      let confirm = window.confirm(
+        newName + ' is already on the list, do you want to update the number?'
+      );
+      confirm
+        ? updatePerson(updatedPerson, searchSimilar[0].id)
+        : console.log();
     }
   };
 
@@ -99,7 +86,19 @@ const App = () => {
   const addPerson = (newObject) => {
     personService
       .add(newObject)
-      .then((returnedPerson) => setPersons(persons.concat(returnedPerson)));
+      .then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        setNotificationMessage(`Person ${returnedPerson.name} was added`);
+        setTimeout(() => {
+          setNotificationMessage(null);
+        }, 5000);
+      })
+      .catch((error) => {
+        setErrorMessage(error.response.data.error);
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 5000);
+      });
   };
 
   const updatePerson = (updatedPerson, personId) => {
