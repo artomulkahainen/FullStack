@@ -4,28 +4,18 @@ const app = require('../app');
 const api = supertest(app);
 const helper = require('./test_helper');
 const Blog = require('../models/blog');
-//const jwt = require('jsonwebtoken');
 
-beforeEach(async (req, res) => {
+beforeEach(async () => {
   await Blog.deleteMany({});
-  await Blog.insertMany(helper.initialBlogs);
-  //const allUsers = helper.usersInDb();
-  /*const userBlogs = {
-    username: helper.initialUsers[0].username,
-    id: helper.initialUsers[0].id,
-  };
+  //await User.deleteMany({});
 
-  const token = jwt.sign(userBlogs, process.env.SECRET);
-  req.token = `Bearer ${token}`;*/
+  const blogObjects = helper.initialBlogs.map((blog) => new Blog(blog));
+
+  const promiseArray = blogObjects.map((blog) => blog.save());
+  await Promise.all(promiseArray);
 });
 
-test('blogs are returned as json', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/);
-});
-/*describe('The get methods', () => {
+describe('The get methods', () => {
   test('return all the blogs back', async () => {
     const res = await api.get('/api/blogs');
     expect(res.body.length).toBe(helper.initialBlogs.length);
@@ -35,7 +25,7 @@ test('blogs are returned as json', async () => {
     const res = await api.get('/api/blogs');
     expect(res.body[0].id).toBeDefined();
   });
-});*/
+});
 
 //describe('The post methods', () => {
 /*

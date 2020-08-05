@@ -1,0 +1,35 @@
+.LoginButton {
+  background-color: #4caf50;
+  border: 2px solid black;
+  border-radius: 4px;
+  color: white;
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 30px;
+}
+
+.LogoutButton {
+  background-color: red;
+  border: 2px solid black;
+  border-radius: 4px;
+  color: white;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+}
+
+.CreateButton {
+  background-color: #4caf50;
+  border: 2px solid black;
+  border-radius: 4px;
+  color: white;
+  padding: 7px 7px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+}

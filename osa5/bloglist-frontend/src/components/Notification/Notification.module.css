@@ -1,0 +1,19 @@
+.Error {
+  background-color: rgb(202, 202, 202);
+  border: 2px solid red;
+  border-radius: 4px;
+  color: red;
+  padding: 5px 20px;
+  text-align: center;
+  display: inline-block;
+}
+
+.Success {
+  background-color: rgb(202, 202, 202);
+  border: 2px solid green;
+  border-radius: 4px;
+  color: green;
+  padding: 5px 20px;
+  text-align: center;
+  display: inline-block;
+}
