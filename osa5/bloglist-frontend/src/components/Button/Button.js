@@ -1,19 +1,23 @@
 import React from 'react';
 import classes from './Button.module.css';
 
-const Button = ({ clicked, text, type }) => (
-  <button
-    onClick={clicked}
-    type={type}
-    className={
-      text === 'Login' || text === 'Create'
-        ? text === 'Login'
-          ? classes.LoginButton
-          : classes.CreateButton
-        : classes.LogoutButton
-    }>
-    {text}
-  </button>
-);
+const Button = ({ clicked, text, type }) => {
+  const textPhrase = 'LoginCreateEnterCreate blog';
+  return (
+    <button
+      onClick={clicked}
+      type={type}
+      className={
+        textPhrase.includes(text)
+          ? text === 'Login' || text === 'Enter'
+            ? classes.LoginButton
+            : classes.CreateButton
+          : classes.LogoutButton
+      }
+    >
+      {text}
+    </button>
+  );
+};
 
 export default Button;

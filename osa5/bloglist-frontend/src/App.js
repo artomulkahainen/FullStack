@@ -26,14 +26,14 @@ const App = () => {
     <div>
       <h1 style={{ color: 'green' }}>Blogs</h1>
       {user === null ? (
-        <Login setUser={setUser} user={user} />
+        <Login setUser={setUser} />
       ) : (
         <p>
           {user.name} logged in{' '}
-          <Button text='Logout' clicked={() => logout()} />
+          <Button text="Logout" clicked={() => logout()} />
         </p>
       )}
-      <Blogs user={user} setUser={setUser} />
+      <Blogs user={user} />
     </div>
   );
 };
