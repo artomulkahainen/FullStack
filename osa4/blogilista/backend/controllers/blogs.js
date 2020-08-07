@@ -27,11 +27,11 @@ blogsRouter.post('/', async (req, res) => {
   const user = await User.findById(decodedToken.id);
 
   if (!blog.url || !blog.title) {
-    return res.status(400).send({error: 'title or url missing'})
+    return res.status(400).send({ error: 'title or url missing' });
   }
 
   if (!blog.likes) {
-    blog.likes = 0
+    blog.likes = 0;
   }
 
   blog.user = user;

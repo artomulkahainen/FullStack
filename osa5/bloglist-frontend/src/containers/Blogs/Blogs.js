@@ -15,7 +15,13 @@ const Blogs = ({ user }) => {
   const blogFormRef = useRef();
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService
+      .getAll()
+      .then((blogs) =>
+        setBlogs(
+          blogs.sort((blog1, blog2) => (blog1.likes > blog2.likes ? -1 : 1))
+        )
+      );
   }, []);
 
   const createBlogHandler = (event) => {
@@ -40,6 +46,28 @@ const Blogs = ({ user }) => {
       setNotificationMessage({
         type: 'Error',
         message: 'Something went wrong with creating a blog',
+      });
+      setTimeout(() => {
+        setNotificationMessage(null);
+      }, 5000);
+    }
+  };
+
+  const likesAddHandler = (id, object) => {
+    const newObject = object;
+    newObject.likes++;
+    console.log(newObject);
+    try {
+      setBlogs(
+        blogs.map((blog) => (blog.id === id ? (blog = newObject) : blog))
+      );
+      blogService
+        .update(id, newObject)
+        .then((returnedObject) => (object = returnedObject));
+    } catch {
+      setNotificationMessage({
+        type: 'Error',
+        message: 'Something went wrong with adding like',
       });
       setTimeout(() => {
         setNotificationMessage(null);
@@ -92,7 +120,7 @@ const Blogs = ({ user }) => {
         </Togglable>
       ) : null}
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} likeAdd={likesAddHandler} />
       ))}
     </div>
   );

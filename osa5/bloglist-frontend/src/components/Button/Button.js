@@ -2,7 +2,7 @@ import React from 'react';
 import classes from './Button.module.css';
 
 const Button = ({ clicked, text, type }) => {
-  const textPhrase = 'LoginCreateEnterCreate blog';
+  const textPhrase = 'LoginCreateEnterCreate blogview';
   return (
     <button
       onClick={clicked}
