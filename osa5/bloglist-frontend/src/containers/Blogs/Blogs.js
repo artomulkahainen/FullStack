@@ -63,11 +63,33 @@ const Blogs = ({ user }) => {
       );
       blogService
         .update(id, newObject)
-        .then((returnedObject) => (object = returnedObject));
+        .then((returnedObject) =>
+          setBlogs(
+            blogs.sort((blog1, blog2) => (blog1.likes > blog2.likes ? -1 : 1))
+          )
+        );
     } catch {
       setNotificationMessage({
         type: 'Error',
         message: 'Something went wrong with adding like',
+      });
+      setTimeout(() => {
+        setNotificationMessage(null);
+      }, 5000);
+    }
+  };
+
+  const blogDeleteHandler = (blog) => {
+    try {
+      blogService
+        .deleteBlog(blog.id)
+        .then((returnedObject) =>
+          setBlogs(blogs.filter((blog) => blog.id !== returnedObject.id))
+        );
+    } catch {
+      setNotificationMessage({
+        type: 'Error',
+        message: 'Something went wrong with deleting blog',
       });
       setTimeout(() => {
         setNotificationMessage(null);
@@ -120,7 +142,13 @@ const Blogs = ({ user }) => {
         </Togglable>
       ) : null}
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} likeAdd={likesAddHandler} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          likeAdd={likesAddHandler}
+          deleteBlog={blogDeleteHandler}
+          user={user}
+        />
       ))}
     </div>
   );

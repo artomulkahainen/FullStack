@@ -4,7 +4,7 @@ import Togglable from '../../containers/Togglable/Togglable';
 import classes from './Blog.module.css';
 import Button from '../Button/Button';
 
-const Blog = ({ blog, likeAdd }) => {
+const Blog = ({ blog, likeAdd, user, deleteBlog }) => {
   const like = (blogId, blog) => {
     likeAdd(blogId, blog);
     return true;
@@ -18,6 +18,7 @@ const Blog = ({ blog, likeAdd }) => {
         <Button text="Like" clicked={() => like(blog.id, blog)} />
       </p>
       <p>{blog.author}</p>
+      <Button text="Remove" clicked={() => deleteBlog(blog)} />
     </div>
   );
   return (
