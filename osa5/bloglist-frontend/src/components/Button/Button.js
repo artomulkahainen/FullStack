@@ -1,8 +1,8 @@
-import React from 'react';
-import classes from './Button.module.css';
+import React from 'react'
+import classes from './Button.module.css'
 
 const Button = ({ clicked, text, type }) => {
-  const textPhrase = 'LoginCreateEnterCreate blogview';
+  const textPhrase = 'LoginCreateEnterCreate blogviewLike'
   return (
     <button
       onClick={clicked}
@@ -17,7 +17,7 @@ const Button = ({ clicked, text, type }) => {
     >
       {text}
     </button>
-  );
-};
+  )
+}
 
-export default Button;
+export default Button

@@ -1,18 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react';
-import blogService from '../../services/blogs';
-import Blog from '../../components/Blog/Blog';
-import Button from '../../components/Button/Button';
-import Input from '../../components/Input/Input';
-import Notification from '../../components/Notification/Notification';
-import Togglable from '../Togglable/Togglable';
+import React, { useState, useEffect, useRef } from 'react'
+import blogService from '../../services/blogs'
+import Blog from '../../components/Blog/Blog'
+import Button from '../../components/Button/Button'
+import Input from '../../components/Input/Input'
+import Notification from '../../components/Notification/Notification'
+import Togglable from '../Togglable/Togglable'
 
 const Blogs = ({ user }) => {
-  const [blogs, setBlogs] = useState([]);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
-  const [notificationMessage, setNotificationMessage] = useState(null);
-  const blogFormRef = useRef();
+  const [blogs, setBlogs] = useState([])
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService
@@ -21,81 +21,83 @@ const Blogs = ({ user }) => {
         setBlogs(
           blogs.sort((blog1, blog2) => (blog1.likes > blog2.likes ? -1 : 1))
         )
-      );
-  }, []);
+      )
+  }, [])
 
   const createBlogHandler = (event) => {
-    event.preventDefault();
-    const newBlog = { title, author, url };
+    event.preventDefault()
+    const newBlog = { title, author, url }
     try {
-      blogFormRef.current.toggleVisibility();
+      blogFormRef.current.toggleVisibility()
       blogService
         .create(newBlog)
-        .then((returnedBlog) => setBlogs(blogs.concat(returnedBlog)));
-      setTitle('');
-      setAuthor('');
-      setUrl('');
+        .then((returnedBlog) => setBlogs(blogs.concat(returnedBlog)))
+      setTitle('')
+      setAuthor('')
+      setUrl('')
       setNotificationMessage({
         type: 'Success',
         message: `A new blog: ${newBlog.title} by ${newBlog.author} was added!`,
-      });
+      })
       setTimeout(() => {
-        setNotificationMessage(null);
-      }, 5000);
+        setNotificationMessage(null)
+      }, 5000)
     } catch (exception) {
       setNotificationMessage({
         type: 'Error',
         message: 'Something went wrong with creating a blog',
-      });
+      })
       setTimeout(() => {
-        setNotificationMessage(null);
-      }, 5000);
+        setNotificationMessage(null)
+      }, 5000)
     }
-  };
+  }
 
   const likesAddHandler = (id, object) => {
-    const newObject = object;
-    newObject.likes++;
-    console.log(newObject);
+    const newObject = object
+    newObject.likes++
+    console.log(newObject)
     try {
       setBlogs(
         blogs.map((blog) => (blog.id === id ? (blog = newObject) : blog))
-      );
+      )
       blogService
         .update(id, newObject)
         .then((returnedObject) =>
           setBlogs(
             blogs.sort((blog1, blog2) => (blog1.likes > blog2.likes ? -1 : 1))
           )
-        );
+        )
     } catch {
       setNotificationMessage({
         type: 'Error',
         message: 'Something went wrong with adding like',
-      });
+      })
       setTimeout(() => {
-        setNotificationMessage(null);
-      }, 5000);
+        setNotificationMessage(null)
+      }, 5000)
     }
-  };
+  }
 
   const blogDeleteHandler = (blog) => {
-    try {
-      blogService
-        .deleteBlog(blog.id)
-        .then((returnedObject) =>
-          setBlogs(blogs.filter((blog) => blog.id !== returnedObject.id))
-        );
-    } catch {
-      setNotificationMessage({
-        type: 'Error',
-        message: 'Something went wrong with deleting blog',
-      });
-      setTimeout(() => {
-        setNotificationMessage(null);
-      }, 5000);
+    if (window.confirm(`Do you really want to remove ${blog.title}?`)) {
+      try {
+        blogService
+          .deleteBlog(blog.id)
+          .then((returnedObject) =>
+            setBlogs(blogs.filter((b) => b.id !== blog.id))
+          )
+      } catch {
+        setNotificationMessage({
+          type: 'Error',
+          message: 'Something went wrong with deleting blog',
+        })
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
+      }
     }
-  };
+  }
 
   const createNew = (
     <div style={{ margin: '30px 0 30px 0' }}>
@@ -122,7 +124,7 @@ const Blogs = ({ user }) => {
         <Button type="submit" text="Create" />
       </form>
     </div>
-  );
+  )
 
   return (
     <div style={{ marginTop: '30px' }}>
@@ -151,7 +153,7 @@ const Blogs = ({ user }) => {
         />
       ))}
     </div>
-  );
-};
+  )
+}
 
-export default Blogs;
+export default Blogs

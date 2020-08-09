@@ -1,35 +1,36 @@
-import React, { useState } from 'react';
-import Notification from '../../components/Notification/Notification';
-import loginService from '../../services/login';
-import blogService from '../../services/blogs';
-import Togglable from '../Togglable/Togglable';
-import Input from '../../components/Input/Input';
-import Button from '../../components/Button/Button';
+import React, { useState } from 'react'
+import Notification from '../../components/Notification/Notification'
+import loginService from '../../services/login'
+import blogService from '../../services/blogs'
+import Togglable from '../Togglable/Togglable'
+import Input from '../../components/Input/Input'
+import Button from '../../components/Button/Button'
+import PropTypes from 'prop-types'
 
 const Login = ({ setUser }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const handleLogin = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
     try {
       const user = await loginService.login({
         username,
         password,
-      });
-      window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user));
-      blogService.setToken(user.token);
-      setUser(user);
-      setUsername('');
-      setPassword('');
+      })
+      window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
+      blogService.setToken(user.token)
+      setUser(user)
+      setUsername('')
+      setPassword('')
     } catch (exception) {
-      setErrorMessage('Wrong username or password');
+      setErrorMessage('Wrong username or password')
       setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
+        setErrorMessage(null)
+      }, 5000)
     }
-  };
+  }
 
   const loginForm = (
     <div>
@@ -49,7 +50,7 @@ const Login = ({ setUser }) => {
         <Button type="submit" text="Enter" />
       </form>
     </div>
-  );
+  )
 
   return (
     <div>
@@ -62,7 +63,11 @@ const Login = ({ setUser }) => {
         {loginForm}
       </Togglable>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+Login.propTypes = {
+  setUser: PropTypes.func.isRequired,
+}
+
+export default Login

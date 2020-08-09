@@ -1,14 +1,16 @@
-import React from 'react';
-import uniqid from 'uniqid';
-import Togglable from '../../containers/Togglable/Togglable';
-import classes from './Blog.module.css';
-import Button from '../Button/Button';
+import React from 'react'
+import uniqid from 'uniqid'
+import Togglable from '../../containers/Togglable/Togglable'
+import classes from './Blog.module.css'
+import Button from '../Button/Button'
 
 const Blog = ({ blog, likeAdd, user, deleteBlog }) => {
   const like = (blogId, blog) => {
-    likeAdd(blogId, blog);
-    return true;
-  };
+    likeAdd(blogId, blog)
+    return true
+  }
+
+  const isOwnBlog = user && blog && blog.user && user.id === blog.user.id
 
   const showAll = (
     <div key={uniqid}>
@@ -18,9 +20,10 @@ const Blog = ({ blog, likeAdd, user, deleteBlog }) => {
         <Button text="Like" clicked={() => like(blog.id, blog)} />
       </p>
       <p>{blog.author}</p>
-      <Button text="Remove" clicked={() => deleteBlog(blog)} />
+      {isOwnBlog && <Button text="Remove" clicked={() => deleteBlog(blog)} />}
     </div>
-  );
+  )
+
   return (
     <div className={classes.Blog} key={uniqid}>
       <p>{blog.title}</p>
@@ -28,7 +31,14 @@ const Blog = ({ blog, likeAdd, user, deleteBlog }) => {
         {showAll}
       </Togglable>
     </div>
-  );
-};
+  )
+}
 
-export default Blog;
+/*Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  likeAdd: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  deleteBlog: PropTypes.func.isRequired,
+}*/
+
+export default Blog

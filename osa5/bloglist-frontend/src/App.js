@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import Blogs from './containers/Blogs/Blogs';
-import Login from './containers/Login/Login';
-import blogService from './services/blogs';
-import Button from './components/Button/Button';
+import React, { useState, useEffect } from 'react'
+import Blogs from './containers/Blogs/Blogs'
+import Login from './containers/Login/Login'
+import blogService from './services/blogs'
+import Button from './components/Button/Button'
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null)
 
   // CHECK IF USER HAS ALREADY LOGGED IN
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser');
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      blogService.setToken(user.token);
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
     }
-  }, []);
+  }, [])
 
   const logout = () => {
-    setUser(null);
-    window.localStorage.removeItem('loggedBlogAppUser');
-  };
+    setUser(null)
+    window.localStorage.removeItem('loggedBlogAppUser')
+  }
 
   return (
     <div>
@@ -35,7 +35,7 @@ const App = () => {
       )}
       <Blogs user={user} />
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
