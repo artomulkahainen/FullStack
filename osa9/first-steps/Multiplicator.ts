@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 interface MultiplyValues {
     value1: number;
     value2: number;
@@ -11,15 +12,15 @@ const parseArguments = (args: Array<string>): MultiplyValues => {
       return {
         value1: Number(args[2]),
         value2: Number(args[3])
-      }
+      };
     } else {
       throw new Error('Provided values were not numbers!');
     }
-}
+};
 
 const multiplicator = (x:number, y:number, printText:string): string => {
     return `${printText} ${x * y}`;
-}
+};
 
 try {
     const { value1, value2 } = parseArguments(process.argv);

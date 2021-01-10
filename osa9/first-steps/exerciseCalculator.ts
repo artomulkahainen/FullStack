@@ -1,6 +1,7 @@
 import { exerciseResult } from "./exerciseResult";
 
-export const parseExerciseArguments = (args: Array<string>): Array<number | undefined> => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+/*const parseExerciseArguments = (args: Array<string>): Array<any> => {
     if (args.length < 3) throw new Error('Not enough arguments');
     
     const exerciseList = args.map((el, index) => {
@@ -19,7 +20,17 @@ export const parseExerciseArguments = (args: Array<string>): Array<number | unde
         throw new Error('Not enough arguments!');
     }
     
+};*/
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const parseWebExerciseArguments = (list: Array<string>): Array<any> => {
+    if (list.length < 1) throw new Error('Not enough arguments');
+    
+    const exerciseList = list.map((el) => !isNaN(Number(el)) ? Number(el) : () => { throw new Error('Arguments are invalid!'); });
+    
+    return exerciseList;
 };
+
 
 export const exerciseCalculator = (resultsArr:Array<number>): exerciseResult => {
     const hoursUsed = Number((resultsArr.reduce((acc, el) => acc + el) / resultsArr.length).toFixed(2));

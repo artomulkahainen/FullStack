@@ -1,4 +1,4 @@
-type Operation = 'add' | 'multiply' | 'divide';
+/*type Operation = 'add' | 'multiply' | 'divide';
 type CalcResult = number;
 
 const calculator = (a:number, b:number, op : Operation): CalcResult => {
@@ -13,6 +13,6 @@ const calculator = (a:number, b:number, op : Operation): CalcResult => {
         default:
             throw new Error('Operation is not divide, multiply or add');
     }
-}
+};
 
-console.log(process.argv);
+console.log(process.argv);*/
